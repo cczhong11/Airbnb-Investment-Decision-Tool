@@ -139,7 +139,9 @@ def main():
         st.write(f"**Monthly Mortgage Payment:** ${mortgage_payment:.2f}")
         st.write(f"**Annual Mortgage Payment:** ${annual_mortgage_payment:.2f}")
         st.write(f"**Estimated Annual Cash Flow:** ${cash_flow:.2f}")
-        st.write(f"**Cash on Cash Return:** {cash_on_cash_return:.2f}%")
+        st.write(
+            f"**Cash on Cash Return:** {cash_on_cash_return:.2f}% = (Annual Cash Flow / Down Payment)"
+        )
 
         if cash_on_cash_return >= 8:
             st.success("Yay! It looks like a solid investment opportunity! (≧◡≦) ♡")
