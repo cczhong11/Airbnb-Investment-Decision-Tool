@@ -58,7 +58,8 @@ def main():
         + property_tax_annual
         + insurance_annual
         + maintenance_annual
-        + annual_pm_fee
+        + (airbnb_platform_fee if use_airbnb_pm == "yes" else 0)  # Add platform fee separately
+        + (amount_after_platform_fee * (pm_fee_percent / 100) if use_airbnb_pm == "yes" else 0)  # PM fee only
         + hoa_fees
         + utilities
         + legal_accounting
