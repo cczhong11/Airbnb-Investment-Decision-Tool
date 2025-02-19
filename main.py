@@ -27,8 +27,19 @@ def main():
     use_airbnb_pm = st.selectbox("Will you be using an Airbnb property manager?", ("yes", "no"))
     if use_airbnb_pm == "yes":
         pm_fee_percent = st.number_input("Airbnb PM Fee Percentage (e.g., 20 for 20%):", value=15.0, step=0.5)
-        annual_pm_fee = annual_gross_rent * (pm_fee_percent / 100)
-        st.write(f"**Annual Airbnb PM Fee:** ${annual_pm_fee:.2f}")
+        # Calculate Airbnb platform fee (3%)
+        airbnb_platform_fee = annual_gross_rent * 0.03
+        # Calculate amount after Airbnb platform fee (97%)
+        amount_after_platform_fee = annual_gross_rent * 0.97
+        # Calculate PM fee based on remaining amount
+        annual_pm_fee = amount_after_platform_fee * (pm_fee_percent / 100)
+        
+        st.write(f"**Annual Airbnb Platform Fee (3%):** ${airbnb_platform_fee:.2f}")
+        st.write(f"**Amount After Platform Fee:** ${amount_after_platform_fee:.2f}")
+        st.write(f"**Annual Airbnb PM Fee ({pm_fee_percent}% of remaining):** ${annual_pm_fee:.2f}")
+        
+        # Add platform fee to total expenses
+        annual_pm_fee += airbnb_platform_fee
     else:
         annual_pm_fee = 0.0
 
