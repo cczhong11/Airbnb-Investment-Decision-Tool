@@ -23,23 +23,19 @@ def main():
     insurance_annual = st.number_input("Annual Insurance Cost ($):", value=2000.0, step=100.0)
     maintenance_annual = st.number_input("Annual Maintenance Cost ($):", value=5000.0, step=100.0)
     
-    st.header("Airbnb Property Management (if applicable)")
-    use_airbnb_pm = st.selectbox("Will you be using an Airbnb property manager?", ("yes", "no"))
+    # Calculate Airbnb platform fee (3%) - applies to all Airbnb rentals
+    airbnb_platform_fee = annual_gross_rent * 0.03
+    amount_after_platform_fee = annual_gross_rent * 0.97
+    st.write(f"**Annual Airbnb Platform Fee (3%):** ${airbnb_platform_fee:.2f}")
+    st.write(f"**Amount After Platform Fee:** ${amount_after_platform_fee:.2f}")
+
+    st.header("Property Management (if applicable)")
+    use_airbnb_pm = st.selectbox("Will you be using a property manager?", ("yes", "no"))
     if use_airbnb_pm == "yes":
-        pm_fee_percent = st.number_input("Airbnb PM Fee Percentage (e.g., 20 for 20%):", value=15.0, step=0.5)
-        # Calculate Airbnb platform fee (3%)
-        airbnb_platform_fee = annual_gross_rent * 0.03
-        # Calculate amount after Airbnb platform fee (97%)
-        amount_after_platform_fee = annual_gross_rent * 0.97
-        # Calculate PM fee based on remaining amount
+        pm_fee_percent = st.number_input("PM Fee Percentage (e.g., 20 for 20%):", value=15.0, step=0.5)
+        # Calculate PM fee based on amount after platform fee
         annual_pm_fee = amount_after_platform_fee * (pm_fee_percent / 100)
-        
-        st.write(f"**Annual Airbnb Platform Fee (3%):** ${airbnb_platform_fee:.2f}")
-        st.write(f"**Amount After Platform Fee:** ${amount_after_platform_fee:.2f}")
-        st.write(f"**Annual Airbnb PM Fee ({pm_fee_percent}% of remaining):** ${annual_pm_fee:.2f}")
-        
-        # Add platform fee to total expenses
-        annual_pm_fee += airbnb_platform_fee
+        st.write(f"**Annual PM Fee ({pm_fee_percent}% of remaining):** ${annual_pm_fee:.2f}")
     else:
         annual_pm_fee = 0.0
 
@@ -58,8 +54,8 @@ def main():
         + property_tax_annual
         + insurance_annual
         + maintenance_annual
-        + (airbnb_platform_fee if use_airbnb_pm == "yes" else 0)  # Add platform fee separately
-        + (amount_after_platform_fee * (pm_fee_percent / 100) if use_airbnb_pm == "yes" else 0)  # PM fee only
+        + airbnb_platform_fee  # Platform fee always applies
+        + annual_pm_fee  # PM fee only if using property manager
         + hoa_fees
         + utilities
         + legal_accounting
